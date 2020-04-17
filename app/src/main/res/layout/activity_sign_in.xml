@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.SignInActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+
+
+            <EditText
+                android:drawableLeft="@drawable/ic_mail_black_24dp"
+                android:drawablePadding="@dimen/five"
+                android:id="@+id/signInEmailET"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_text_background"
+                android:hint="Email"/>
+            <EditText
+                android:drawablePadding="@dimen/five"
+                android:drawableLeft="@drawable/ic_https_black_24dp"
+                android:id="@+id/signInPasswordET"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:padding="10dp"
+                android:inputType="textPassword"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_text_background"
+                android:hint="Password"/>
+
+
+
+
+            <Button
+                android:id="@+id/signInBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/custom_button"
+                android:text="Login"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Don't have an account?" />
+
+                <TextView
+                    android:id="@+id/signUpTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/sign_up"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>
