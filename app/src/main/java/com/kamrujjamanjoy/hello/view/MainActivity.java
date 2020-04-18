@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.kamrujjamanjoy.hello.R;
 import com.kamrujjamanjoy.hello.databinding.ActivityMainBinding;
+import com.kamrujjamanjoy.hello.adapter.ChatDialogAdapter;
 import com.quickblox.auth.QBAuth;
 import com.quickblox.auth.session.BaseService;
 import com.quickblox.auth.session.QBSession;
@@ -28,12 +31,25 @@ public class MainActivity extends AppCompatActivity {
     private String user, password;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadChatDialog();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
 
         createSeasonForChat();
         loadChatDialog();
+
+        binding.chatDialogAddUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ListUserActivity.class));
+            }
+        });
     }
 
     private void loadChatDialog() {
@@ -43,10 +59,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<QBChatDialog> qbChatDialogs, Bundle bundle) {
 
+                ChatDialogAdapter adapter = new ChatDialogAdapter(getBaseContext(),qbChatDialogs);
+                binding.lstChatDialog.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(QBResponseException e) {
+                Log.e("ERROR", e.getMessage() );
 
             }
         });

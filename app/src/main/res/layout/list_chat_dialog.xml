@@ -3,13 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:layout_height="match_parent">
+    android:layout_margin="@dimen/ten"
+    android:layout_marginBottom="@dimen/ten"
+    android:padding="@dimen/ten"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/imageChatDialog"/>
     <LinearLayout
+        android:gravity="start|center"
+        android:layout_gravity="center"
         android:layout_marginLeft="@dimen/sixteen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

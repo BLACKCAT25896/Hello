@@ -1,4 +1,4 @@
-package com.kamrujjamanjoy.hello.view.adapter;
+package com.kamrujjamanjoy.hello.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -52,8 +52,10 @@ public class ChatDialogAdapter extends BaseAdapter {
 
             chatTitle = view.findViewById(R.id.listChatDialogTitle);
             chatMessage = view.findViewById(R.id.listChatDialogMessage);
-
             chatImage = view.findViewById(R.id.imageChatDialog);
+            chatMessage.setText(qbChatDialogs.get(position).getLastMessage());
+            chatTitle.setText(qbChatDialogs.get(position).getName());
+
 
             ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
             int randomColor = colorGenerator.getRandomColor();
