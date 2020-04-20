@@ -43,4 +43,8 @@ dependencies {
     implementation "com.quickblox:quickblox-android-sdk-messages:$qbSdkVersion"
     implementation "com.quickblox:quickblox-android-sdk-customobjects:$qbSdkVersion"
     implementation "com.quickblox:quickblox-android-sdk-core:$qbSdkVersion"
+
+    //bubbleview
+
+    implementation 'com.github.lguipeng:BubbleView:1.0.1'
 }

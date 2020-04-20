@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.ChatMessageActivity">
+
+        <ImageButton
+            android:layout_width="@dimen/forty"
+            android:layout_height="@dimen/forty"
+            android:background="@null"
+            android:src="@drawable/ic_insert_emoticon_black_24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/five"
+            android:id="@+id/emoji_btn"/>
+
+        <ImageButton
+            android:layout_width="@dimen/forty"
+            android:layout_height="@dimen/forty"
+            android:background="@null"
+            android:src="@android:drawable/ic_menu_send"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/five"
+            android:id="@+id/send_btn"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edt_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/send_btn"
+            android:layout_toRightOf="@+id/emoji_btn"
+            android:hint="Enter your message"
+            android:background="@null"
+            android:padding="@dimen/five"/>
+
+        <ListView
+            android:id="@+id/list_of_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/edt_content"
+            android:layout_marginBottom="@dimen/ten"
+            android:divider="@android:color/transparent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:dividerHeight="@dimen/ten"
+            android:stackFromBottom="true"/>
+
+    </RelativeLayout>
+</layout>
