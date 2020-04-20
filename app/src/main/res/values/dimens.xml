@@ -4,4 +4,7 @@
     <dimen name="ten">10dp</dimen>
     <dimen name="sixteen">16dp</dimen>
     <dimen name="forty">40dp</dimen>
+    <dimen name="large">16dp</dimen>
+    <dimen name="medium">14dp</dimen>
+    <dimen name="small">12sp</dimen>
 </resources>
