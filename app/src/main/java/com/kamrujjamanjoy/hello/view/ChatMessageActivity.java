@@ -19,18 +19,32 @@ import com.quickblox.chat.exception.QBChatException;
 import com.quickblox.chat.listeners.QBChatDialogMessageListener;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBChatMessage;
+import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.chat.request.QBMessageGetBuilder;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.exception.QBResponseException;
 
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smackx.muc.DiscussionHistory;
 
 import java.util.ArrayList;
 
-public class ChatMessageActivity extends AppCompatActivity {
+public class ChatMessageActivity extends AppCompatActivity implements QBChatDialogMessageListener {
     private ActivityChatMessageBinding binding;
     QBChatDialog qbChatDialog;
     ChatMessageAdapter adapter;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        qbChatDialog.removeMessageListrener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        qbChatDialog.removeMessageListrener(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +65,16 @@ public class ChatMessageActivity extends AppCompatActivity {
                 } catch (SmackException.NotConnectedException e) {
                     e.printStackTrace();
                 }
-                QBChatMessageHolder.getInstance().putMessage(qbChatDialog.getDialogId(),message);
-                ArrayList<QBChatMessage> messages = QBChatMessageHolder.getInstance().getChatMessagesByDialogId(qbChatDialog.getDialogId());
-                adapter = new ChatMessageAdapter(getBaseContext(),messages);
-                binding.listOfMessage.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+
+
+                //put message to cache
+                if (qbChatDialog.getType() == QBDialogType.PRIVATE) {
+                    QBChatMessageHolder.getInstance().putMessage(qbChatDialog.getDialogId(), message);
+                    ArrayList<QBChatMessage> messages = QBChatMessageHolder.getInstance().getChatMessagesByDialogId(qbChatDialog.getDialogId());
+                    adapter = new ChatMessageAdapter(getBaseContext(), messages);
+                    binding.listOfMessage.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
 
                 binding.edtContent.setText("");
                 binding.edtContent.setFocusable(true);
@@ -67,13 +86,13 @@ public class ChatMessageActivity extends AppCompatActivity {
     private void retrieveMessage() {
         QBMessageGetBuilder messageGetBuilder = new QBMessageGetBuilder();
         messageGetBuilder.setLimit(500);
-        if (qbChatDialog!=null){
-            QBRestChatService.getDialogMessages(qbChatDialog,messageGetBuilder).performAsync(new QBEntityCallback<ArrayList<QBChatMessage>>() {
+        if (qbChatDialog != null) {
+            QBRestChatService.getDialogMessages(qbChatDialog, messageGetBuilder).performAsync(new QBEntityCallback<ArrayList<QBChatMessage>>() {
                 @Override
                 public void onSuccess(ArrayList<QBChatMessage> qbChatMessages, Bundle bundle) {
                     //put message to cache
-                    QBChatMessageHolder.getInstance().putMessages(qbChatDialog.getDialogId(),qbChatMessages);
-                    adapter = new ChatMessageAdapter(getBaseContext(),qbChatMessages);
+                    QBChatMessageHolder.getInstance().putMessages(qbChatDialog.getDialogId(), qbChatMessages);
+                    adapter = new ChatMessageAdapter(getBaseContext(), qbChatMessages);
                     binding.listOfMessage.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
@@ -91,7 +110,7 @@ public class ChatMessageActivity extends AppCompatActivity {
         qbChatDialog = (QBChatDialog) getIntent().getSerializableExtra(Common.DIALOG_EXTRA);
         qbChatDialog.initForChat(QBChatService.getInstance());
 
-        //register incomming message
+        //register inComing message
         QBIncomingMessagesManager incomingMessagesManager = QBChatService.getInstance().getIncomingMessagesManager();
         incomingMessagesManager.addDialogMessageListener(new QBChatDialogMessageListener() {
             @Override
@@ -105,28 +124,49 @@ public class ChatMessageActivity extends AppCompatActivity {
             }
         });
 
-        qbChatDialog.addMessageListener(new QBChatDialogMessageListener() {
-            @Override
-            public void processMessage(String s, QBChatMessage qbChatMessage, Integer integer) {
+        //add join group to enable group chat
 
-                //cache message
+        if (qbChatDialog.getType() == QBDialogType.GROUP || qbChatDialog.getType() == QBDialogType.PUBLIC_GROUP) {
 
-                QBChatMessageHolder.getInstance().putMessage(qbChatMessage.getDialogId(), qbChatMessage);
-                ArrayList<QBChatMessage> messages = QBChatMessageHolder.getInstance().getChatMessagesByDialogId(qbChatMessage.getDialogId());
+            DiscussionHistory discussionHistory = new DiscussionHistory();
+            discussionHistory.setMaxStanzas(0);
+            qbChatDialog.join(discussionHistory, new QBEntityCallback() {
+                @Override
+                public void onSuccess(Object o, Bundle bundle) {
 
-                adapter = new ChatMessageAdapter(getBaseContext(), messages);
-                binding.listOfMessage.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                }
 
+                @Override
+                public void onError(QBResponseException e) {
 
-            }
+                    Log.d("ERROR", " " + e.getMessage());
 
-            @Override
-            public void processError(String s, QBChatException e, QBChatMessage qbChatMessage, Integer integer) {
+                }
+            });
 
-                Log.e("ERROR", e.getMessage());
-            }
-        });
+        }
 
+        qbChatDialog.addMessageListener(this);
+
+    }
+
+    @Override
+    public void processMessage(String s, QBChatMessage qbChatMessage, Integer integer) {
+
+        //cache message
+
+        QBChatMessageHolder.getInstance().putMessage(qbChatMessage.getDialogId(), qbChatMessage);
+        ArrayList<QBChatMessage> messages = QBChatMessageHolder.getInstance().getChatMessagesByDialogId(qbChatMessage.getDialogId());
+
+        adapter = new ChatMessageAdapter(getBaseContext(), messages);
+        binding.listOfMessage.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void processError(String s, QBChatException e, QBChatMessage qbChatMessage, Integer integer) {
+
+        Log.e("ERROR", " " + e.getMessage());
     }
 }
