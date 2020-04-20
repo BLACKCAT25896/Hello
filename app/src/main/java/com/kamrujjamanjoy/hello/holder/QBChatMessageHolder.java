@@ -31,7 +31,7 @@ public class QBChatMessageHolder {
 
     }
 
-    public void putMessages(String dialogId, QBChatMessage qbChatMessage){
+    public void putMessage(String dialogId, QBChatMessage qbChatMessage){
         List<QBChatMessage> lstResult  = this.qbChatMessageArray.get(dialogId);
         lstResult.add(qbChatMessage);
         ArrayList<QBChatMessage> lstAdded = new ArrayList<>(lstResult.size());
