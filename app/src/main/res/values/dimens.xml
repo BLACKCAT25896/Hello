@@ -7,4 +7,5 @@
     <dimen name="large">16dp</dimen>
     <dimen name="medium">14dp</dimen>
     <dimen name="small">12sp</dimen>
+    <dimen name="twenty">20sp</dimen>
 </resources>

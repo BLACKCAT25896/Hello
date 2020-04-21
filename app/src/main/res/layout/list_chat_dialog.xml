@@ -17,7 +17,8 @@
         android:gravity="start|center"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/sixteen"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:orientation="vertical">
         
@@ -35,5 +36,10 @@
             android:id="@+id/listChatDialogMessage"
             android:textSize="@dimen/small"/>
     </LinearLayout>
+    <ImageView
+        android:layout_gravity="center"
+        android:layout_width="@dimen/twenty"
+        android:layout_height="@dimen/twenty"
+        android:id="@+id/image_unread_message"/>
 
 </LinearLayout>

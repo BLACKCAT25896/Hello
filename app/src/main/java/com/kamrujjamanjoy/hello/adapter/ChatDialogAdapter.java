@@ -1,6 +1,7 @@
 package com.kamrujjamanjoy.hello.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.kamrujjamanjoy.hello.R;
+import com.kamrujjamanjoy.hello.holder.QBUnreadMessageHolder;
 import com.quickblox.chat.model.QBChatDialog;
 
 import java.util.ArrayList;
@@ -43,16 +45,18 @@ public class ChatDialogAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
 
-        if (view==null){
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.list_chat_dialog,null);
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.list_chat_dialog, null);
 
             TextView chatTitle, chatMessage;
-            ImageView chatImage;
+            ImageView chatImage, unreadMessage;
 
             chatTitle = view.findViewById(R.id.listChatDialogTitle);
             chatMessage = view.findViewById(R.id.listChatDialogMessage);
             chatImage = view.findViewById(R.id.imageChatDialog);
+            unreadMessage = view.findViewById(R.id.image_unread_message);
+
             chatMessage.setText(qbChatDialogs.get(position).getLastMessage());
             chatTitle.setText(qbChatDialogs.get(position).getName());
 
@@ -63,16 +67,23 @@ public class ChatDialogAdapter extends BaseAdapter {
                     .withBorder(4)
                     .endConfig()
                     .round();
-            TextDrawable drawable = builder.build(chatTitle.getText().toString().substring(0,1).toUpperCase(),randomColor);
+            TextDrawable drawable = builder.build(chatTitle.getText().toString().substring(0, 1).toUpperCase(), randomColor);
+
             chatImage.setImageDrawable(drawable);
 
+            //setMessage Unread count
 
+            TextDrawable.IBuilder unreadBuilder = TextDrawable.builder().beginConfig()
+                    .withBorder(4)
+                    .endConfig()
+                    .round();
+            int unreadCount = QBUnreadMessageHolder.getInstance().getBundle().getInt(qbChatDialogs.get(position).getDialogId());
 
+            if (unreadCount > 0) {
+                TextDrawable unreadDrawable = unreadBuilder.build("" + unreadCount, Color.RED);
+                unreadMessage.setImageDrawable(unreadDrawable);
 
-
-
-
-
+            }
 
 
         }
