@@ -7,6 +7,14 @@
         android:layout_height="match_parent"
         tools:context=".view.ChatMessageActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@color/white"
+            android:id="@+id/messageToolbar"/>
+
         <ImageButton
             android:layout_width="@dimen/forty"
             android:layout_height="@dimen/forty"
@@ -39,14 +47,13 @@
             android:padding="@dimen/five"/>
 
         <ListView
+            android:layout_below="@+id/messageToolbar"
             android:id="@+id/list_of_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/edt_content"
             android:layout_marginBottom="@dimen/ten"
             android:divider="@android:color/transparent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
             android:dividerHeight="@dimen/ten"
             android:stackFromBottom="true"/>
 

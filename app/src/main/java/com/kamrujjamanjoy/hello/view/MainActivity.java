@@ -1,5 +1,6 @@
 package com.kamrujjamanjoy.hello.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -7,6 +8,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -44,6 +47,31 @@ public class MainActivity extends AppCompatActivity implements QBSystemMessageLi
     private ActivityMainBinding binding;
     private String user, password;
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chat_dialog_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.chat_dialog_menu_user:
+                showUserProfile();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void showUserProfile() {
+
+        startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -54,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements QBSystemMessageLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+
+        binding.toolbar.setTitle("Hello App");
+        setSupportActionBar(binding.toolbar);
+
+
 
         createSeasonForChat();
         binding.lstChatDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {

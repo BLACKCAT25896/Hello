@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -8,8 +8,18 @@
         android:orientation="vertical"
         tools:context=".view.MainActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@color/white"
+            android:id="@+id/toolbar"/>
+
+
 
         <ListView
+            android:layout_below="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/lstChatDialog"/>
@@ -23,6 +33,8 @@
             android:src="@drawable/ic_add_black_24dp"
             android:backgroundTint="@color/colorPrimaryDark"
             app:layout_anchor="@id/lstChatDialog"
-            app:layout_anchorGravity="bottom|right|end"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            app:layout_anchorGravity="bottom|right|end"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 </layout>

@@ -8,4 +8,6 @@
     <dimen name="medium">14dp</dimen>
     <dimen name="small">12sp</dimen>
     <dimen name="twenty">20sp</dimen>
+    <dimen name="thirty">30dp</dimen>
+    <dimen name="hundred">100dp</dimen>
 </resources>

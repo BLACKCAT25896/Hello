@@ -7,6 +7,10 @@ import java.util.List;
 
 public class Common {
     public static final String DIALOG_EXTRA = "Dialogs";
+    public static final String UPDATE_DIALOG_EXTRA = "chatDialogs";
+    public static final String UPDATE_MODE = "mode";
+    public static final String UPDATE_ADD_MODE = "add";
+    public static final String UPDATE_REMOVE_MODE = "remove";
 
     public static String createChatDialogName(List<Integer>qbUsers){
         List<QBUser> qbUsers1 = QBUsersHolder.getInstance().getUsersByIds(qbUsers);
@@ -17,5 +21,8 @@ public class Common {
                 name = name.replace(30,name.length()-1,"...");
             return name.toString();
 
+    }
+    public static boolean isNullOrEmptyString(String content){
+        return  (content!=null && !content.trim().isEmpty()?false:true);
     }
 }
