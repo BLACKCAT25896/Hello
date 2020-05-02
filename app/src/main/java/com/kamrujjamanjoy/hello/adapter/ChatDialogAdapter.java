@@ -2,6 +2,8 @@ package com.kamrujjamanjoy.hello.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,11 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.kamrujjamanjoy.hello.R;
 import com.kamrujjamanjoy.hello.holder.QBUnreadMessageHolder;
 import com.quickblox.chat.model.QBChatDialog;
+import com.quickblox.content.QBContent;
+import com.quickblox.content.model.QBFile;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -50,7 +57,7 @@ public class ChatDialogAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.list_chat_dialog, null);
 
             TextView chatTitle, chatMessage;
-            ImageView chatImage, unreadMessage;
+            final ImageView chatImage, unreadMessage;
 
             chatTitle = view.findViewById(R.id.listChatDialogTitle);
             chatMessage = view.findViewById(R.id.listChatDialogMessage);
@@ -63,13 +70,36 @@ public class ChatDialogAdapter extends BaseAdapter {
 
             ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
             int randomColor = colorGenerator.getRandomColor();
-            TextDrawable.IBuilder builder = TextDrawable.builder().beginConfig()
-                    .withBorder(4)
-                    .endConfig()
-                    .round();
-            TextDrawable drawable = builder.build(chatTitle.getText().toString().substring(0, 1).toUpperCase(), randomColor);
 
-            chatImage.setImageDrawable(drawable);
+            if (qbChatDialogs.get(position).getPhoto().equals("null")) {
+                TextDrawable.IBuilder builder = TextDrawable.builder().beginConfig()
+                        .withBorder(4)
+                        .endConfig()
+                        .round();
+                TextDrawable drawable = builder.build(chatTitle.getText().toString().substring(0, 1).toUpperCase(), randomColor);
+
+                chatImage.setImageDrawable(drawable);
+            } else {
+                //download bitmap
+                QBContent.getFile(Integer.parseInt(qbChatDialogs.get(position).getPhoto())).performAsync(new QBEntityCallback<QBFile>() {
+                    @Override
+                    public void onSuccess(QBFile qbFile, Bundle bundle) {
+                        String fileUrl = qbFile.getPublicUrl();
+                        Picasso.get()
+                                .load(fileUrl)
+                                .resize(50, 50)
+                                .centerCrop()
+                                .into(chatImage);
+
+                    }
+
+                    @Override
+                    public void onError(QBResponseException e) {
+                        Log.e("ERROR", e.getMessage() );
+
+                    }
+                });
+            }
 
             //setMessage Unread count
 

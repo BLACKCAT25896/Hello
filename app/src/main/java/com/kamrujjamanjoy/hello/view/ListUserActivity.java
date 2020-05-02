@@ -118,6 +118,7 @@ public class ListUserActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(QBResponseException e) {
+                                Toast.makeText(ListUserActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
                             }
                         });

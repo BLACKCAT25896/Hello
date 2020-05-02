@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +49,45 @@ public class MainActivity extends AppCompatActivity implements QBSystemMessageLi
     private String user, password;
 
 
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getMenuInflater().inflate(R.menu.chat_dialog_context_menu,menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()){
+            case R.id.context_delete_dialog:
+                deleteDialog(info.position);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void deleteDialog(int index) {
+        final QBChatDialog chatDialog = (QBChatDialog) binding.lstChatDialog.getAdapter().getItem(index);
+        QBRestChatService.deleteDialog(chatDialog.getDialogId(),false).performAsync(new QBEntityCallback<Void>() {
+            @Override
+            public void onSuccess(Void aVoid, Bundle bundle) {
+                QBChatDialogHolder.getInstance().removeDialog(chatDialog.getDialogId());
+                ChatDialogAdapter adapter = new ChatDialogAdapter(getBaseContext(),QBChatDialogHolder.getInstance().getAllChatDialogs());
+                binding.lstChatDialog.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(QBResponseException e) {
+
+            }
+        });
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.chat_dialog_menu,menu);
@@ -85,8 +125,7 @@ public class MainActivity extends AppCompatActivity implements QBSystemMessageLi
 
         binding.toolbar.setTitle("Hello App");
         setSupportActionBar(binding.toolbar);
-
-
+        registerForContextMenu(binding.lstChatDialog);
 
         createSeasonForChat();
         binding.lstChatDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {

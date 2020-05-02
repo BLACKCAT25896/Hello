@@ -47,4 +47,5 @@ dependencies {
     //bubbleview
 
     implementation 'com.github.lguipeng:BubbleView:1.0.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
